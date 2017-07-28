@@ -27,11 +27,20 @@ def create():
     cur.close()
     db.close()
 
-@app.route('/insert') #http://192.168.1.173:8888
-def insert():
+@app.route('/insert/<id>/<name>') #http://192.168.1.173:8888
+def insert(id,name):
+    db = MySQLdb.connect("localhost","root","1234","SCOTT")
+    cur = db.cursor()
+    sql = "insert into Student values ('%d','%s')" %(int(id),name)
+    try:
+        cur.execute(sql)
+        db.commit()
+    except:
+        db.rollback()
     return render_template('insert.html')
-#/insert?id=3&name=3
 
+    cur.close()
+    db.close()
 
 @app.route('/delete/<id>') #http://192.168.1.173:8888
 def delete(id):
